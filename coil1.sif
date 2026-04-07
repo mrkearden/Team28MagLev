@@ -1,0 +1,165 @@
+Header
+  CHECK KEYWORDS Warn
+  Mesh DB "." "mesh2"
+  Include Path ""
+  Results Directory "results"
+End
+
+Simulation
+  Max Output Level = 5
+  Coordinate System = Axi Symmetric
+  Simulation Type = Transient
+Timestep sizes = .002
+Timestep intervals = 100
+  Steady State Max Iterations = 1 ! one-directinal coupling
+coordinate scaling = 0.01
+End
+
+Constants
+  Stefan Boltzmann = 5.6704e-08
+End
+
+! eqn_coil
+Equation 1
+  Active Solvers(2) = 1 2  ! MGDynamics, MGDynamicsCalc
+End
+
+! MGDynamics
+Solver 1
+  Equation = MgDyn2D
+  Procedure = "MagnetoDynamics2D" "MagnetoDynamics2D"
+  Exec Solver = Always
+  Stabilize = True
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-7
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Direct !Iterative
+Linear System Direct Method = Mumps
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-10
+  BiCGstabl polynomial degree = 2
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 10
+  Linear System Precondition Recompute = 1
+  Angular Frequency = 0
+End
+
+! MGDynamicsCalc
+Solver 2
+  Equation = MgDynPost
+  Calculate Magnetic Field Strength = True
+  Calculate Current Density = True
+  Calculate Joule Heating = False
+  Procedure = "MagnetoDynamics" "MagnetoDynamicsCalcFields"
+  Calculate Electric Field = True
+  Exec Solver = Always
+  Stabilize = True
+  Optimize Bandwidth = True
+  Steady State Convergence Tolerance = 1.0e-5
+  Nonlinear System Convergence Tolerance = 1.0e-7
+  Nonlinear System Max Iterations = 20
+  Nonlinear System Newton After Iterations = 3
+  Nonlinear System Newton After Tolerance = 1.0e-3
+  Nonlinear System Relaxation Factor = 1
+  Linear System Solver = Direct !Iterative
+Linear System Direct Method = Mumps
+  Linear System Iterative Method = BiCGStab
+  Linear System Max Iterations = 500
+  Linear System Convergence Tolerance = 1.0e-10
+  BiCGstabl polynomial degree = 2
+  Linear System Preconditioning = ILU0
+  Linear System ILUT Tolerance = 1.0e-3
+  Linear System Abort Not Converged = False
+  Linear System Residual Output = 10
+  Linear System Precondition Recompute = 1
+Average Within Materials = Logical True
+  Angular Frequency = 0
+calculate nodal forces = logical False
+End
+
+! ResultOutputSolver
+Solver 3
+  Exec Solver = after saving
+  Equation = "ResultOutput"
+  Procedure = "ResultOutputSolve" "ResultOutputSolver"
+  VTU Format = True
+  Vtu Part collection = True
+
+  Save Bulk Only = True
+  Save Geometry Ids = True
+  Output Directory = results
+  Output File name = coil
+End
+
+Material 1
+  Name = "coil1"
+  Density = 8960.0
+  Electric Conductivity = 59.E7
+  Emissivity = 0.2
+  Heat Capacity = 415.0
+  Heat Conductivity = 390.0
+  Relative Permeability = 1
+  Relative Permittivity = 1
+End
+
+Material 2
+  Name = "air"
+  Density = 1.1885
+  Electric Conductivity = 1.0
+  Heat Capacity = 1006.4
+  Heat Conductivity = 0.025873
+  Relative Permeability = 1
+  Relative Permittivity = 1
+End
+
+Body 1
+  Name = "coil1"
+  Target Bodies(1) = 1
+  Equation = 1  ! eqn_coil
+  Material = 1  ! copper
+  Body Force = 1
+End
+Body 2
+  Name = "air2"
+  Target Bodies(2) = 2 3
+  Equation = 1  ! eqn_coil
+  Material = 1  ! air
+End
+
+Boundary Condition 1
+  Name = "bc_surrounding"
+  Target Boundaries(1) = 1
+  External Temperature = 293.15
+Heat Transfer Coefficient = 200
+
+AV = Real 0.0
+AV {e} = Real 0.0
+
+! No BCs needed for scalar potential 
+End
+
+Body Force 1
+  Name = "current1"
+Current Density = Variable Time
+ Real MATC "-13186813.1868*sin(314.6*tx(0))"
+End
+
+Body Force 2
+  Name = "current2"
+Current Density = Variable Time 
+ Real MATC "14769230.77*sin(314.6*tx(0))"
+End
+
+
+
+
+
+
+
