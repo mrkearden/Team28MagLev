@@ -1,0 +1,30 @@
+!------ Skeleton for body section -----
+Body 1
+  Name = coil1
+End
+
+Body 2
+  Name = coil2
+End
+
+Body 3
+  Name = plate
+End
+
+Body 4
+  Name = air
+End
+
+!------ Skeleton for boundary section -----
+Boundary Condition 1
+  Name = outer
+End
+
+Boundary Condition 2
+  Name = plate
+End
+
+Boundary Condition 3
+  Name = bnry7
+End
+

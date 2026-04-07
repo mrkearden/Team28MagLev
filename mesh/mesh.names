@@ -1,0 +1,9 @@
+! ----- names for bodies -----
+$ coil1 = 1
+$ coil2 = 2
+$ plate = 3
+$ air = 4
+! ----- names for boundaries -----
+$ outer = 1
+$ plate = 2
+$ bnry7 = 3
