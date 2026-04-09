@@ -1,0 +1,18 @@
+! ----- names for bodies -----
+$ air = 1
+$ inner = 2
+$ outer = 3
+$ disc = 4
+! ----- names for boundaries -----
+$ far = 1
+$ Dtop = 2
+$ Dbot = 3
+$ Dside = 4
+$ Oouter = 5
+$ Oinner = 6
+$ Obottom = 7
+$ Otop = 8
+$ Iinner = 9
+$ Itop = 10
+$ Ibottom = 11
+$ Iouter = 12
